@@ -19,8 +19,7 @@ yarn deploy
 ```
 
 That builds the fork as committed (Discord webhook formatting, GooglyAI Mail
-title, favicons) and publishes `mail.googlyai.app`. `wrangler.jsonc` stays
-local and gitignored.
+title, favicons, and `wrangler.jsonc`) and publishes `mail.googlyai.app`.
 
 Header text is still Settings → App branding (`brand_name` in D1). It is
 already `GooglyAI Mail`. The tab title follows that value after `/api/config`
@@ -28,21 +27,20 @@ loads, and `index.html` uses the same title for the first paint.
 
 ## This deployment
 
-| Item                     | Value                                                                     |
-| ------------------------ | ------------------------------------------------------------------------- |
-| Live UI                  | https://mail.googlyai.app                                                 |
-| Worker name              | `saasmail`                                                                |
-| Cloudflare account ID    | `24d0fd4dee694044dbe6f9afdac31891`                                        |
-| Inbound / send-from zone | `googlyai.app`                                                            |
-| Git `origin`             | `git@github.com:buibuilabs/saasmail.git`                                  |
-| Git `upstream`           | `https://github.com/choyiny/saasmail.git`                                 |
-| Fork?                    | Yes. This checkout is the buibuilabs fork. Custom code lives in the repo. |
-| Config                   | `wrangler.jsonc` and `.dev.vars` are **gitignored**. Never commit them.   |
-| Deploy                   | `yarn deploy` from WSL.                                                   |
+| Item                     | Value                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| Live UI                  | https://mail.googlyai.app                                                              |
+| Worker name              | `saasmail`                                                                             |
+| Cloudflare account ID    | `24d0fd4dee694044dbe6f9afdac31891`                                                     |
+| Inbound / send-from zone | `googlyai.app`                                                                         |
+| Git `origin`             | `git@github.com:buibuilabs/saasmail.git`                                               |
+| Git `upstream`           | `https://github.com/choyiny/saasmail.git`                                              |
+| Fork?                    | Yes. This checkout is the buibuilabs fork. Custom code lives in the repo.              |
+| Config                   | `wrangler.jsonc` is committed for this fork's CI deploy. `.dev.vars` stays gitignored. |
+| Deploy                   | `yarn deploy` from WSL.                                                                |
 
 Local Durable Object migration uses `new_sqlite_classes` (this account rejects
-KV-backed `new_classes`). That lives only in gitignored `wrangler.jsonc` — leave
-it alone when pulling.
+KV-backed `new_classes`). That setting is in the committed `wrangler.jsonc`.
 
 ## Update from upstream
 
@@ -62,9 +60,9 @@ yarn db:migrate:prod
 yarn deploy
 ```
 
-`wrangler.jsonc` / `.dev.vars` are ignored, so pulls do not overwrite IDs or
-secrets. After a pull, skim `wrangler.jsonc.example` for new bindings or vars
-and copy anything needed into the local `wrangler.jsonc` by hand.
+`.dev.vars` is ignored, so pulls do not overwrite local secrets. After a pull,
+skim `wrangler.jsonc.example` for new bindings or vars and add anything this
+fork needs to the committed `wrangler.jsonc`.
 
 `yarn db:migrate:prod` applies **pending** D1 SQL only. See
 [Data recovery](data-recovery.md#migrations-and-data).
@@ -98,7 +96,7 @@ Email Service verification.
 - Do not set `DISABLE_PASSKEY_GATE` or `DEMO_MODE` as production secrets.
 - Do not rewrite `origin` / `upstream` remotes.
 - Do not force-push to `choyiny/saasmail` or to this fork’s `main`.
-- Do not commit `wrangler.jsonc`, `.dev.vars`, or `.brand/`.
+- Do not commit `.dev.vars` or `.brand/`.
 
 ---
 

@@ -1,0 +1,81 @@
+{
+  // Fork deploy config for mail.googlyai.app. Secrets stay in Wrangler, not here.
+  "name": "saasmail",
+  "main": "worker/src/index.ts",
+  "account_id": "24d0fd4dee694044dbe6f9afdac31891",
+  "compatibility_date": "2026-04-14",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "mail.googlyai.app",
+      "custom_domain": true
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "saasmail-db",
+      "database_id": "d5646acc-89aa-463f-9ee8-5a79f18f2661"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "saasmail-attachments"
+    }
+  ],
+  "send_email": [
+    { "name": "EMAIL" }
+  ],
+  "assets": {
+    "directory": "./dist/client",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": true
+  },
+  "email_routing": {
+    "enabled": true
+  },
+  "observability": {
+    "enabled": true
+  },
+  "queues": {
+    "producers": [
+      {
+        "binding": "EMAIL_QUEUE",
+        "queue": "saasmail-sequence-emails"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "saasmail-sequence-emails",
+        "max_batch_size": 10,
+        "max_retries": 3
+      }
+    ]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "NOTIFICATIONS_HUB",
+        "class_name": "NotificationsHub"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["NotificationsHub"]
+    }
+  ],
+  "triggers": {
+    "crons": ["0 * * * *"]
+  },
+  "vars": {
+    "BASE_URL": "https://mail.googlyai.app",
+    "TRUSTED_ORIGINS": "http://localhost:8080,http://localhost:8788,https://mail.googlyai.app",
+    "COOKIE_PREFIX": "saasmail",
+    "VAPID_PUBLIC_KEY": "BB_-aJ0OQQe_mA9_xmaHTfJ72kJ-m1D03r6x854Wf5R-jw3qxo_DdzIoM8DhVQNRqCDT98mNSI8XaBqqoM8WBFg",
+    "VAPID_SUBJECT": "mailto:admin@googlyai.app"
+  }
+}
