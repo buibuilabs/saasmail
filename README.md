@@ -3,6 +3,7 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/buibuilabs/saasmail/actions/workflows/sync-upstream.yml"><img alt="Sync upstream" src="https://github.com/buibuilabs/saasmail/actions/workflows/sync-upstream.yml/badge.svg?branch=main" /></a>
   <a href="https://github.com/choyiny/saasmail/actions/workflows/test.yml"><img alt="Tests" src="https://github.com/choyiny/saasmail/actions/workflows/test.yml/badge.svg" /></a>
   <a href="https://github.com/choyiny/saasmail/actions/workflows/e2e.yml"><img alt="E2E" src="https://github.com/choyiny/saasmail/actions/workflows/e2e.yml/badge.svg" /></a>
   <a href="https://github.com/choyiny/saasmail/actions/workflows/codeql.yml"><img alt="CodeQL" src="https://github.com/choyiny/saasmail/actions/workflows/codeql.yml/badge.svg" /></a>

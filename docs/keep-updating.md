@@ -34,7 +34,7 @@ loads, and `index.html` uses the same title for the first paint.
 | Worker name              | `saasmail`                                                                |
 | Cloudflare account ID    | `24d0fd4dee694044dbe6f9afdac31891`                                        |
 | Inbound / send-from zone | `googlyai.app`                                                            |
-| Git `origin`             | `https://github.com/buibuilabs/saasmail.git`                              |
+| Git `origin`             | `git@github.com:buibuilabs/saasmail.git`                                  |
 | Git `upstream`           | `https://github.com/choyiny/saasmail.git`                                 |
 | Fork?                    | Yes. This checkout is the buibuilabs fork. Custom code lives in the repo. |
 | Config                   | `wrangler.jsonc` and `.dev.vars` are **gitignored**. Never commit them.   |
