@@ -90,17 +90,16 @@ export default function TopNav() {
         }`}
       >
         <div className="flex items-center justify-between px-2 py-1">
-          {/* Brand — Mail glyph in lime; wordmark text comes from
+          {/* Brand — mark is the favicon; wordmark text comes from
               app_settings (admin-editable) and falls back to "saasmail". */}
           <Link
             to="/"
             className="flex items-center gap-1.5 pl-2 text-base font-extrabold uppercase tracking-tight text-white transition-opacity duration-150 hover:opacity-80"
           >
-            <Mail
-              className="h-4 w-4"
-              strokeWidth={2.5}
-              style={{ color: "#BFFF00" }}
-              aria-hidden
+            <img
+              src="/favicon/favicon-32x32.png"
+              alt=""
+              className="h-4 w-4 rounded-[3px]"
             />
             {brandName}
           </Link>

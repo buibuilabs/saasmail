@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { buildWebhookPayload, sendWebhook } from "../lib/webhook-delivery";
+import {
+  buildWebhookPayload,
+  discordWebhookContent,
+  sendWebhook,
+} from "../lib/webhook-delivery";
 import { signWebhookBody } from "../lib/webhook-signature";
 
 describe("buildWebhookPayload", () => {
@@ -100,6 +104,28 @@ describe("sendWebhook", () => {
       payload,
       fetchImpl,
     );
-    expect(result).toEqual({ ok: false, status: 500 });
+    expect(result).toEqual({ ok: false, status: 500, error: "nope" });
+  });
+
+  it("posts Discord {content} when the URL is a Discord webhook", async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(new Response(null, { status: 204 }));
+    const result = await sendWebhook(
+      {
+        url: "https://discord.com/api/webhooks/123/token",
+        secret: null,
+      },
+      payload,
+      fetchImpl,
+    );
+    expect(result).toEqual({ ok: true, status: 204 });
+    const body = JSON.parse(fetchImpl.mock.calls[0][1]?.body as string) as {
+      content: string;
+    };
+    expect(body.content).toBe(discordWebhookContent(payload));
+    expect(body.content).toContain("support@d.com");
+    expect(body.content).toContain("Subject: Hi");
+    expect(body).not.toHaveProperty("event");
   });
 });

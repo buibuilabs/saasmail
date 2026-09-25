@@ -6,6 +6,7 @@ POST to an external URL whenever a **new inbound message** is received — usefu
 
 - **Config:** Admins set a destination URL (and optional signing secret) on the **API keys** page. Global, single best-effort attempt, **disabled by default** (no URL = nothing fires). Any URL scheme is accepted, including `http://` for local automation.
 - **Event:** one `message.received` per received message (deduped by `Message-ID`).
+- **Discord:** a URL containing `discord.com/api/webhooks/` or `discordapp.com/api/webhooks/` is sent as `{ "content": "..." }` instead of the JSON below. Leave the signing secret empty. Discord returns HTTP 204 when the post is accepted. Other URLs still receive the raw event.
 - **Security:** when a secret is set, each request includes `X-SaaSMail-Signature: sha256=<hmac>`, an HMAC-SHA256 of the raw request body. Verify it before trusting the payload.
 
 ## Payload

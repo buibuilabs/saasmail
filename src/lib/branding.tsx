@@ -67,6 +67,11 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
     void refresh();
   }, [refresh]);
 
+  useEffect(() => {
+    if (!branding.loaded) return;
+    document.title = branding.brandName;
+  }, [branding.loaded, branding.brandName]);
+
   return (
     <BrandingContext.Provider value={{ ...branding, refresh }}>
       {children}

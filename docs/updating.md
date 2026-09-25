@@ -24,4 +24,6 @@ yarn db:migrate:prod
 
 ---
 
-**See also:** [Setup](setup.md) · [Local development](development.md) · [CHANGELOG](../CHANGELOG.md)
+**See also:** [Keeping this clone updated](keep-updating.md) (this deployment's WSL loop) ·
+[Data recovery](data-recovery.md) · [Setup](setup.md) · [Local development](development.md) ·
+[CHANGELOG](../CHANGELOG.md)

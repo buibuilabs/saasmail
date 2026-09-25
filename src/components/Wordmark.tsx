@@ -1,4 +1,3 @@
-import { Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useBranding } from "@/lib/branding";
 
@@ -17,11 +16,10 @@ export function WordmarkLarge({ className }: WordmarkProps) {
     <div
       className={cn("flex flex-col items-center gap-3 text-white", className)}
     >
-      <Mail
-        className="h-12 w-12"
-        strokeWidth={2}
-        style={{ color: "#BFFF00" }}
-        aria-hidden
+      <img
+        src="/favicon/android-chrome-192x192.png"
+        alt=""
+        className="h-12 w-12 rounded-[10px]"
       />
       <h1 className="text-2xl font-extrabold uppercase tracking-tight">
         {brandName}

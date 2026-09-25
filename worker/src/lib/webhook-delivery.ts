@@ -25,6 +25,38 @@ export interface WebhookPayload {
   url: string;
 }
 
+const DISCORD_CONTENT_MAX = 2000;
+
+/** Discord incoming webhooks require a `content` string, not our event JSON. */
+export function isDiscordWebhookUrl(url: string): boolean {
+  return (
+    url.includes("discord.com/api/webhooks/") ||
+    url.includes("discordapp.com/api/webhooks/")
+  );
+}
+
+export function discordWebhookContent(payload: WebhookPayload): string {
+  const who = payload.from.name
+    ? `${payload.from.name} (${payload.from.address})`
+    : payload.from.address;
+  const lines = [
+    `New mail to ${payload.inbox}`,
+    `From: ${who}`,
+    payload.subject ? `Subject: ${payload.subject}` : "",
+    payload.textPreview,
+    payload.url,
+  ].filter((line) => line.length > 0);
+  const text = lines.join("\n").trim() || "New mail";
+  return text.length > DISCORD_CONTENT_MAX
+    ? `${text.slice(0, DISCORD_CONTENT_MAX - 3)}...`
+    : text;
+}
+
+function webhookRequestBody(url: string, payload: WebhookPayload): string {
+  if (!isDiscordWebhookUrl(url)) return JSON.stringify(payload);
+  return JSON.stringify({ content: discordWebhookContent(payload) });
+}
+
 /** Pure: assemble the webhook body from already-parsed email data. */
 export function buildWebhookPayload(args: {
   emailId: string;
@@ -64,7 +96,7 @@ export async function sendWebhook(
   payload: WebhookPayload,
   fetchImpl: typeof fetch = fetch,
 ): Promise<{ ok: boolean; status?: number; error?: string }> {
-  const body = JSON.stringify(payload);
+  const body = webhookRequestBody(config.url, payload);
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     "User-Agent": "SaaSMail-Webhook/1",
@@ -85,7 +117,18 @@ export async function sendWebhook(
       body,
       signal: controller.signal,
     });
-    return { ok: res.ok, status: res.status };
+    const errText = (await res.text()).slice(0, 500);
+    if (!res.ok) {
+      // Do not log config.url — Discord webhook URLs embed a secret token.
+      console.warn(
+        `Webhook delivery failed: status=${res.status} body=${errText}`,
+      );
+    }
+    return {
+      ok: res.ok,
+      status: res.status,
+      ...(res.ok ? {} : { error: errText || `HTTP ${res.status}` }),
+    };
   } catch (err) {
     return {
       ok: false,

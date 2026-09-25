@@ -8,6 +8,8 @@ Conventions for coding agents (and humans) working in this repo. Product docs li
 | ------------------------------------------------------------------------ | ---------------------------------------------------- |
 | [`README.md`](./README.md)                                               | Project overview, quickstart, feature index          |
 | [`docs/`](./docs/README.md)                                              | Setup, configuration, architecture, per-feature docs |
+| [`docs/keep-updating.md`](./docs/keep-updating.md)                       | This fork: `yarn deploy`, upstream sync Action       |
+| [`docs/data-recovery.md`](./docs/data-recovery.md)                       | D1 Time Travel, backups, what migrations do to data  |
 | [`docs/development.md`](./docs/development.md)                           | Local dev commands, seeding, OpenAPI, E2E            |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md)                                   | Fork/PR process, Apache 2.0, CoC                     |
 | [`migrations/README.md`](./migrations/README.md)                         | drizzle-kit generate / apply details                 |
